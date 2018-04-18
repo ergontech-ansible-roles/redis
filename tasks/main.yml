@@ -2,12 +2,22 @@
 # TODO: "/etc/init.d/redis-server"
 # TODO: break out into named services
 
-- name: install redis-server
+- name: Install redis-server
   apt:
     name: redis-server=2:3.0.6-1
     state: present
 
-- name: install redis config
+- name: Enable redis service
+  service:
+    name: redis-server
+    enabled: yes
+
+- name: Start Redis service
+  service:
+    name: redis-server
+    state: started
+
+- name: Ensure Redis is configured
   template:
     src: redis.conf.j2
     dest: /etc/redis/redis.conf
@@ -15,13 +25,3 @@
     group: redis
     owner: redis
   notify: restart redis-server
-
-- name: enable redis service
-  service:
-    name: redis-server
-    enabled: yes
-
-- name: start and enable redis service
-  service:
-    name: redis-server
-    state: started
