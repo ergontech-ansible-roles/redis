@@ -3,19 +3,26 @@
 # TODO: break out into named services
 
 - name: Install redis-server
+  become: yes
   apt:
     name: redis-server=2:3.0.6-1
     state: present
+  tags:
+    - redis
 
 - name: Enable redis service
   service:
     name: redis-server
     enabled: yes
+  tags:
+    - redis
 
 - name: Start Redis service
   service:
     name: redis-server
     state: started
+  tags:
+    - redis
 
 - name: Ensure Redis is configured
   template:
@@ -25,3 +32,5 @@
     group: redis
     owner: redis
   notify: restart redis-server
+  tags:
+    - redis
